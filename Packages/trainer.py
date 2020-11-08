@@ -4,6 +4,8 @@ from tensorflow.keras.layers import Dropout,Flatten,Dense,Input
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import SGD,Adam
 import os
+from sklearn.metrics import classification_report, confusion_matrix
+import numpy as np
 
 def build_model(nbr_classes):
 
@@ -116,8 +118,19 @@ def train(path_to_data,batch_size,epochs):
         epochs = epochs
     )
 
+    print('[INFO] Evaluation phase...')
+
+    predictions = model.predict_generator(eval_generator)
+    predictions_idxs = np.argmax(predictions,axis=1)
+    my_classification_report = classification_report(eval_generator.classes,predictions_idxs,target_names=eval_generator.class_indices.keys())
+    my_confusion_matrix = confusion_matrix(eval_generator.classes,predictions_idxs)
+
+    print("[INFO] Classification report:")
+    print(my_classification_report)
+    print("[INFO] Confusion matrix")
+    print(my_confusion_matrix)
 
 if __name__ =="__main__":
 
     path_to_data = 'C:/Users/eugur/Deep_Learning_Deployment/food-11/'
-    train(path_to_data,2,2)
+    train(path_to_data,2,1)
