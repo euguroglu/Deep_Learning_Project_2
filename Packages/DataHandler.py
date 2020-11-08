@@ -47,6 +47,7 @@ def visualize_some_image(path_to_data):
         ax = fig.add_subplot(4,4,i+1)
         ax.title.set_text(chosen_label)
         ax.imshow(Image.open(chosen_img))
+    fig.tight_layout(pad=0.05)
     plt.show()
 
 
