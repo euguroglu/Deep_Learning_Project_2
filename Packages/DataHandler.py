@@ -51,10 +51,32 @@ def visualize_some_image(path_to_data):
     plt.show()
 
 
+def get_images_sizes(path_to_data):
+
+    imgs_paths = []
+    widths = []
+    heights = []
+
+    for r,d,f in os.walk(path_to_data):
+        for file in f:
+            if file.endswith(".jpg"):
+                img = Image.open(os.path.join(r,file))
+                widths.append(img.size[0])
+                heights.append(img.size[1])
+                img.close()
+
+    mean_widths = sum(widths)/len(widths)
+    mean_heights = sum(heights)/len(heights)
+    median_widths = np.median(widths)
+    median_heights = np.median(heights)
+
+    return mean_widths,mean_heights,median_widths,median_heights
+
 if __name__=='__main__':
 
     split_data_switch = False
-    visualize_data_switch = True
+    visualize_data_switch = False
+    print_insight_switch = True
 
     path_to_eval_data = 'C:/Users/eugur/Deep_Learning_Deployment/food-11/evaluation/'
     path_to_train_data = 'C:/Users/eugur/Deep_Learning_Deployment/food-11/training/'
@@ -68,5 +90,13 @@ if __name__=='__main__':
         for i in range(11):
             split_data_into_class_folders(path_to_val_data,i)
 
-    if visualize_some_image:
+    if visualize_data_switch:
         visualize_some_image(path_to_train_data)
+
+
+    if print_insight_switch:
+        mean_widths,mean_heights,median_widths,median_heights = get_images_sizes(path_to_train_data)
+        print('Mean width: {}'.format(mean_widths))
+        print('Mean height: {}'.format(mean_heights))
+        print('Median width: {}'.format(median_widths))
+        print('Median height: {}'.format(median_heights))
