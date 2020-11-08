@@ -69,6 +69,16 @@ def build_data_pipelines(batch_size,train_data_path,val_data_path,eval_data_path
     )
     return train_generator,val_generator,eval_generator
 
+def get_number_of_imgs_inside_folder(directory):
+
+    totalcount = 0
+
+    for root,dirnames,files in os.walk(directory):
+        for file in files:
+            _,ext = os.path.splitext(file)
+            if ext in ['.png','.jpg','jpeg']:
+                totalcount = totalcount + 1
+    return totalcount
 
 
 def train(path_to_data,batch_size,epochs):
@@ -77,6 +87,13 @@ def train(path_to_data,batch_size,epochs):
     path_val_data = os.path.join(path_to_data,'validation')
     path_eval_data = os.path.join(path_to_data,'evaluation')
 
+    total_train_imgs = get_number_of_imgs_inside_folder(path_train_data)
+    total_val_imgs = get_number_of_imgs_inside_folder(path_val_data)
+    total_eval_imgs = get_number_of_imgs_inside_folder(path_eval_data)
+
+    print(total_train_imgs,total_val_imgs,total_eval_imgs)
+
+
     train_generator,val_generator,eval_generator = build_data_pipelines(
         batch_size=batch_size,
         train_data_path=path_train_data,
@@ -84,7 +101,8 @@ def train(path_to_data,batch_size,epochs):
         eval_data_path=path_eval_data
     )
 
-    model = build_model(nbr_classes=11)
+    classes_dict = train_generator.class_indices
+    model = build_model(nbr_classes=len(classes_dict.keys()))
 
     optimizer = Adam(lr=1e-5)
 
@@ -92,9 +110,9 @@ def train(path_to_data,batch_size,epochs):
 
     model.fit_generator(
         train_generator,
-        steps_per_epoch= 9000 // batch_size,
+        steps_per_epoch= total_train_imgs // batch_size,
         validation_data=val_generator,
-        validation_steps= 3500 // batch_size,
+        validation_steps= total_val_imgs // batch_size,
         epochs = epochs
     )
 
