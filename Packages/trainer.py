@@ -6,6 +6,7 @@ from tensorflow.keras.optimizers import SGD,Adam
 import os
 from sklearn.metrics import classification_report, confusion_matrix
 import numpy as np
+from DataHandler import download_data_to_local_directory
 
 def build_model(nbr_classes):
 
@@ -132,5 +133,9 @@ def train(path_to_data,batch_size,epochs):
 
 if __name__ =="__main__":
 
-    path_to_data = 'C:/Users/eugur/Deep_Learning_Deployment/food-11/'
+
+    print("Data Download started...")
+    download_data_to_local_directory('dummy-bucket-food-dataset','C:/Users/eugur/Deep_Learning_Deployment/data')
+    print('Download finished...')
+    path_to_data = 'C:/Users/eugur/Deep_Learning_Deployment/data'
     train(path_to_data,2,1)

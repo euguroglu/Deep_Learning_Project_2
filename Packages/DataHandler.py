@@ -8,7 +8,7 @@ import numpy as np
 from google.cloud import storage
 
 #Initial variables
-path_to_credentials = './credentials/infra-actor-295022-b2f5aab4b230.json'
+path_to_credentials = 'C:/Users/eugur/Deep_Learning_Deployment/credentials/infra-actor-295022-14f93a7bc996.json'
 
 food_classes = ['bread','dairy_product','dessert','egg','fried_food','meat','noodles_pasta',
                'rice','seafood','soup','vegetable']
@@ -104,7 +104,7 @@ def download_data_to_local_directory(bucket_name,local_directory):
                 if not os.path.isdir(os.path.dirname(joined_path)):
                     os.makedirs(os.path.dirname(joined_path))
 
-            blob.download_to_filename(joined_path)
+                blob.download_to_filename(joined_path)
 
 
 
@@ -115,7 +115,7 @@ if __name__=='__main__':
     visualize_data_switch = False
     print_insight_switch = False
     list_blobs_switch = False
-    download_data_switch = True
+    download_data_switch = False
 
     path_to_eval_data = 'C:/Users/eugur/Deep_Learning_Deployment/food-11/evaluation/'
     path_to_train_data = 'C:/Users/eugur/Deep_Learning_Deployment/food-11/training/'
