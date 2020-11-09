@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from google.cloud import storage
 
+#Initial variables
 path_to_credentials = './credentials/infra-actor-295022-b2f5aab4b230.json'
 
 food_classes = ['bread','dairy_product','dessert','egg','fried_food','meat','noodles_pasta',
