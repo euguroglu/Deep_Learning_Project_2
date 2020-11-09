@@ -83,6 +83,28 @@ def list_blobs(bucket_name):
 
     return blobs
 
+def download_data_to_local_directory(bucket_name,local_directory):
+
+    storage_client = storage.Client.from_service_account_json(path_to_credentials)
+    blobs = storage_client.list_blobs(bucket_name)
+
+    if not os.path.isdir(local_directory):
+        os.makedirs(local_directory)
+
+    for blob in blobs:
+
+        joined_path = os.path.join(local_directory,blob.name)
+
+        if os.path.basename(joined_path) == '':
+            if not os.path.isdir(joined_path):
+                os.makedirs(joined_path)
+        else:
+            if not os.path.isfile(joined_path):
+                if not os.path.isdir(os.path.dirname(joined_path)):
+                    os.makedirs(os.path.dirname(joined_path))
+
+            blob.download_to_filename(joined_path)
+
 
 
 
@@ -91,7 +113,8 @@ if __name__=='__main__':
     split_data_switch = False
     visualize_data_switch = False
     print_insight_switch = False
-    list_blobs_switch = True
+    list_blobs_switch = False
+    download_data_switch = True
 
     path_to_eval_data = 'C:/Users/eugur/Deep_Learning_Deployment/food-11/evaluation/'
     path_to_train_data = 'C:/Users/eugur/Deep_Learning_Deployment/food-11/training/'
@@ -121,3 +144,6 @@ if __name__=='__main__':
 
         for blob in blobs:
             print(blob.name)
+
+    if download_data_switch:
+        download_data_to_local_directory('dummy-bucket-food-dataset','C:/Users/eugur/Deep_Learning_Deployment/data')
