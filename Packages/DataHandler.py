@@ -5,6 +5,9 @@ import random
 from PIL import Image
 import matplotlib.pyplot as plt
 import numpy as np
+from google.cloud import storage
+
+path_to_credentials = './credentials/infra-actor-295022-b2f5aab4b230.json'
 
 food_classes = ['bread','dairy_product','dessert','egg','fried_food','meat','noodles_pasta',
                'rice','seafood','soup','vegetable']
@@ -72,11 +75,23 @@ def get_images_sizes(path_to_data):
 
     return mean_widths,mean_heights,median_widths,median_heights
 
+def list_blobs(bucket_name):
+
+    storage_client = storage.Client.from_service_account_json(path_to_credentials)
+
+    blobs = storage_client.list_blobs(bucket_name)
+
+    return blobs
+
+
+
+
 if __name__=='__main__':
 
     split_data_switch = False
     visualize_data_switch = False
-    print_insight_switch = True
+    print_insight_switch = False
+    list_blobs_switch = True
 
     path_to_eval_data = 'C:/Users/eugur/Deep_Learning_Deployment/food-11/evaluation/'
     path_to_train_data = 'C:/Users/eugur/Deep_Learning_Deployment/food-11/training/'
@@ -100,3 +115,9 @@ if __name__=='__main__':
         print('Mean height: {}'.format(mean_heights))
         print('Median width: {}'.format(median_widths))
         print('Median height: {}'.format(median_heights))
+
+    if list_blobs_switch:
+        blobs = list_blobs('dummy-bucket-food-dataset')
+
+        for blob in blobs:
+            print(blob.name)
