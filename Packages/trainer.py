@@ -8,6 +8,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 import numpy as np
 from DataHandler import download_data_to_local_directory
 from tensorflow.python.client import device_lib
+import argparse
 
 print("Tensorflow is running on following devices: ")
 print(device_lib.list_local_devices())
@@ -138,9 +139,17 @@ def train(path_to_data,batch_size,epochs):
 
 if __name__ =="__main__":
 
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("--bucket_name",type=str, help="Bucket name on Google cloud storage",
+                        default='dummy-bucket-food-dataset')
+    parser.add_argument("--batch_size",type=int, help="Batch size used by the deep learning model",
+                        default=2)
+
+    args = parser.parse_args()
 
     print("Data Download started...")
-    download_data_to_local_directory('dummy-bucket-food-dataset','C:/Users/eugur/Deep_Learning_Deployment/data')
+    download_data_to_local_directory(args.bucket_name,'C:/Users/eugur/Deep_Learning_Deployment/data')
     print('Download finished...')
     path_to_data = 'C:/Users/eugur/Deep_Learning_Deployment/data'
-    train(path_to_data,2,1)
+    train(path_to_data,args.batch_size,1)
