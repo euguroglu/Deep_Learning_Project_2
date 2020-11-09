@@ -8,7 +8,7 @@ import numpy as np
 from google.cloud import storage
 
 #Initial variables
-path_to_credentials = 'C:/Users/eugur/Deep_Learning_Deployment/credentials/infra-actor-295022-14f93a7bc996.json'
+path_to_credentials = './credentials/infra-actor-295022-14f93a7bc996.json'
 
 food_classes = ['bread','dairy_product','dessert','egg','fried_food','meat','noodles_pasta',
                'rice','seafood','soup','vegetable']

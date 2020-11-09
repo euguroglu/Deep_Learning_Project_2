@@ -7,6 +7,11 @@ import os
 from sklearn.metrics import classification_report, confusion_matrix
 import numpy as np
 from DataHandler import download_data_to_local_directory
+from tensorflow.python.client import device_lib
+
+print("Tensorflow is running on following devices: ")
+print(device_lib.list_local_devices())
+
 
 def build_model(nbr_classes):
 
