@@ -1,0 +1,8 @@
+C:\Users\eugur\Deep_Learning_Deployment\Deep_Learning_Project_2\Packages>docker build -f Dockerfile -t gcr.io/train-deep-learning-models/tf-food-classification:food-classification-gpu .
+
+
+
+docker tag gcr-io/train-deep-learning-models/tf-food-classification:food-classification-gpu
+
+docker push gcr.io/infra-actor-295022/tf-food-classification:food-classification-gpu
+

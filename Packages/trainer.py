@@ -9,6 +9,7 @@ import numpy as np
 from DataHandler import download_data_to_local_directory
 from tensorflow.python.client import device_lib
 import argparse
+import hypertune
 
 print("Tensorflow is running on following devices: ")
 print(device_lib.list_local_devices())
@@ -90,7 +91,7 @@ def get_number_of_imgs_inside_folder(directory):
     return totalcount
 
 
-def train(path_to_data,batch_size,epochs):
+def train(path_to_data,batch_size,epochs,learning_rate):
 
     path_train_data = os.path.join(path_to_data,'training')
     path_val_data = os.path.join(path_to_data,'validation')
@@ -113,7 +114,7 @@ def train(path_to_data,batch_size,epochs):
     classes_dict = train_generator.class_indices
     model = build_model(nbr_classes=len(classes_dict.keys()))
 
-    optimizer = Adam(lr=1e-5)
+    optimizer = Adam(lr=learning_rate)
 
     model.compile(loss='categorical_crossentropy',optimizer=optimizer,metrics=['accuracy'])
 
@@ -137,6 +138,17 @@ def train(path_to_data,batch_size,epochs):
     print("[INFO] Confusion matrix")
     print(my_confusion_matrix)
 
+    print("Starting evaluation using model.evaluate_generator")
+    scores = model.evaluate_generator(eval_generator)
+    print("Done evaluating!")
+    loss = scores[0]
+    print(f"loss for hyptertune = {loss}")
+    hpt = hypertune.HyperTune()
+    hpt.report_hyperparameter_tuning_metric(hyperparameter_metric_tag='loss',
+                                            metric_value=loss, global_step=epochs)
+
+
+
 if __name__ =="__main__":
 
     parser = argparse.ArgumentParser()
@@ -145,6 +157,9 @@ if __name__ =="__main__":
                         default='dummy-bucket-food-dataset')
     parser.add_argument("--batch_size",type=int, help="Batch size used by the deep learning model",
                         default=2)
+    parser.add_argument("--learning_rate",type=float, help="Learning rate used by the deep learning model",
+                        default=1e-5)
+
 
     args = parser.parse_args()
 
@@ -152,4 +167,4 @@ if __name__ =="__main__":
     download_data_to_local_directory(args.bucket_name,'C:/Users/eugur/Deep_Learning_Deployment/data')
     print('Download finished...')
     path_to_data = 'C:/Users/eugur/Deep_Learning_Deployment/data'
-    train(path_to_data,args.batch_size,1)
+    train(path_to_data,args.batch_size,10,args.learning_rate)
