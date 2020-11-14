@@ -1,8 +1,38 @@
 C:\Users\eugur\Deep_Learning_Deployment\Deep_Learning_Project_2\Packages>docker build -f Dockerfile -t gcr.io/train-deep-learning-models/tf-food-classification:food-classification-gpu .
 
+docker build -f Dockerfile -t gcr.io/infra-actor-295022/tf-food-classification:food-classification-gpu2 .
+
 
 
 docker tag gcr-io/train-deep-learning-models/tf-food-classification:food-classification-gpu
 
 docker push gcr.io/infra-actor-295022/tf-food-classification:food-classification-gpu
 
+infra-actor-295022
+
+gcr.io/train-deep-learning-models/tf-food-classification:food-classification-gpu .
+
+gcr.io/infra-actor-295022/tf-food-classification:food-classification-gpu
+
+
+
+REGION=us-central1
+JOB_NAME=food_training_classification_container_job_$(date +)
+JOB_NAME=food_training_classification_container_job_$(date +%Y_%m_%d_%H_%M_%S)
+food_training_classification_container_job_2020_11_10_13_30_00
+
+Traning job push
+gcloud ai-platform jobs submit training food_training_classification_container_job_2020_11_10_13_30_00 --scale-tier BASIC_GPU --region us-central1 --master-image-uri gcr.io/infra-actor-295022/tf-food-classification:food-classification-gpu --batch_size=8
+
+
+gcloud ai-platform jobs submit training food_training_classification_container_job_2020_16_10_13_30_00 --scale-tier BASIC_GPU --region us-central1 --master-image-uri gcr.io/infra-actor-295022/tf-food-classification:food-classification-gpu --  --batch_size=8
+
+gcloud ai-platform jobs submit training food_training_classification_container_job_2020_20_26_13_30_00 --scale-tier BASIC_GPU --region us-central1 --master-image-uri gcr.io/infra-actor-295022/tf-food-classification:food-classification-gpu2 --config config.yaml
+
+googlecloud docker code;
+
+project id:infra-actor-295022
+
+gcloud builds submit --tag gcr.io/infra-actor-295022/food_predictor_app
+
+gcloud run deploy --image gcr.io/infra-actor-295022/food_predictor_app --platform managed --service-account train-deep-learning-test-model
